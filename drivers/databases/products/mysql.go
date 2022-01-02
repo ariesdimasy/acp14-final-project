@@ -4,6 +4,7 @@ import (
 	_productDomain "acp-final/business/products"
 	"acp-final/helpers"
 	"context"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -36,7 +37,7 @@ func (repo *ProductRepositoryDatabase) GetAllProducts(ctx context.Context) ([]_p
 
 func (repo *ProductRepositoryDatabase) GetProductByCategoryId(ctx context.Context, category_id uint) ([]_productDomain.ProductDomain, error) {
 	var products []Product
-	result := repo.db.Where("category_id = ?", category_id).Find(&products)
+	result := repo.db.Debug().Find(&products, map[string]interface{}{"category_id": category_id})
 
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
@@ -51,7 +52,8 @@ func (repo *ProductRepositoryDatabase) GetProductByCategoryId(ctx context.Contex
 
 func (repo *ProductRepositoryDatabase) GetProductById(ctx context.Context, product_id int) (_productDomain.ProductDomain, error) {
 	var productResult Product
-	result := repo.db.FirstOrInit(&productResult, map[string]interface{}{"id": product_id})
+	result := repo.db.Debug().Find(&productResult, map[string]interface{}{"id": product_id})
+	fmt.Println(result.Statement)
 
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {

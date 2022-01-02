@@ -62,7 +62,7 @@ func (controller *ProductController) CreateProduct(c echo.Context) error {
 	productRequest := _request.CreateProduct{}
 
 	product, err := controller.usecase.CreateProduct(ctx, _productsDomain.ProductCreateDomain{
-		Id:          productRequest.Id,
+
 		Name:        productRequest.Name,
 		Description: productRequest.Description,
 		CategoryId:  productRequest.CategoryId,
